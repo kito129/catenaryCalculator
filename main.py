@@ -166,12 +166,14 @@ def get_temperature():
         temp = float(input("Insert temperature: "))
     return temperature
 
+
 def get_elevation_difference():
     elevation_difference = float(input("Insert elevation difference: "))
     while elevation_difference < -10 or elevation_difference > 30:
         print("Elevation difference must be between -10 and 30")
         elevation_difference = float(input("Insert elevation difference: "))
     return elevation_difference
+
 
 def get_span_length():
     span_length = float(input("Insert span length: "))
@@ -180,13 +182,15 @@ def get_span_length():
         span_length = float(input("Insert span length: "))
     return span_length
 
+
 def get_angle(title):
     print("Getting angle: ", title)
-    angle_hsx = float(input("Insert angle: "))
-    while angle_hsx < 0 or angle_hsx > 400:
+    angle = float(input("Insert angle: "))
+    while angle < 0 or angle_hsx > 400:
         print("Hsx must be between 0 and 400")
-        angle_hsx = float(input("Insert angle: "))
-    return angle_hsx
+        angle = float(input("Insert angle: "))
+    return angle
+
 
 def get_freccia_tab():
     freccia_tab = float(input("Insert freccia tab: "))
@@ -195,8 +199,8 @@ def get_freccia_tab():
         freccia_tab = float(input("Insert freccia tab: "))
     return freccia_tab
 
-# *** MAIN  ***
 
+# *** MAIN  ***
 if __name__ == '__main__':
     temperature = 7.0
     elevation_difference = -2.5
@@ -213,7 +217,6 @@ if __name__ == '__main__':
     angle_vd = 90.4640
     freccia_tab = 13.5000
 
-    # answer user if want to insert data so call the getter data, or use the defautl so use the assigne value
     if input("Do you want to insert data? (y/n)") == "y":
         # function that get this data from user with validation
         temperature = get_temperature()
