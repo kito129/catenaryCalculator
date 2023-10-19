@@ -158,6 +158,43 @@ def calculate_params(campata, hg, vg, h1, v1, h2, v2, h3, v3, hd, vd, elevation_
     return param1, param2, param3, arrow_media, parametro_media, arr1, arr2, arr3, ecart_type
 
 
+# *** GET DATA FUNCTIONS  ***
+def get_temperature():
+    temp = float(input("Insert temperature: "))
+    while temperature < -10 or temperature > 30:
+        print("Temperature must be between -10 and 30")
+        temp = float(input("Insert temperature: "))
+    return temperature
+
+def get_elevation_difference():
+    elevation_difference = float(input("Insert elevation difference: "))
+    while elevation_difference < -10 or elevation_difference > 30:
+        print("Elevation difference must be between -10 and 30")
+        elevation_difference = float(input("Insert elevation difference: "))
+    return elevation_difference
+
+def get_span_length():
+    span_length = float(input("Insert span length: "))
+    while span_length < 100 or span_length > 1000:
+        print("Span length must be between 100 and 1000")
+        span_length = float(input("Insert span length: "))
+    return span_length
+
+def get_angle(title):
+    print("Getting angle: ", title)
+    angle_hsx = float(input("Insert angle: "))
+    while angle_hsx < 0 or angle_hsx > 400:
+        print("Hsx must be between 0 and 400")
+        angle_hsx = float(input("Insert angle: "))
+    return angle_hsx
+
+def get_freccia_tab():
+    freccia_tab = float(input("Insert freccia tab: "))
+    while freccia_tab < 0 or freccia_tab > 20:
+        print("Freccia tab must be between 0 and 20")
+        freccia_tab = float(input("Insert freccia tab: "))
+    return freccia_tab
+
 # *** MAIN  ***
 
 if __name__ == '__main__':
@@ -176,12 +213,28 @@ if __name__ == '__main__':
     angle_vd = 90.4640
     freccia_tab = 13.5000
 
-    param12, param13, param23, result, media, arrow1, arrow2, arrow3, error = \
-        calculate_params(span_length, angle_hsx, angle_vsx, angle_h1, angle_v1, angle_h2, angle_v2, angle_h3,
-                         angle_v3, angle_hd, angle_vd, elevation_difference)
+    # answer user if want to insert data so call the getter data, or use the defautl so use the assigne value
+    if input("Do you want to insert data? (y/n)") == "y":
+        # function that get this data from user with validation
+        temperature = get_temperature()
+        elevation_difference = get_elevation_difference()
+        span_length = get_span_length()
+        angle_hsx = get_angle("Hsx")
+        angle_vsx = get_angle("Vsx")
+        angle_h1 = get_angle("H1")
+        angle_v1 = get_angle("V1")
+        angle_h2 = get_angle("H2")
+        angle_v2 = get_angle("V1")
+        angle_h3 = get_angle("H3")
+        angle_v3 = get_angle("V3")
+        angle_hd = get_angle("HD")
+        angle_vd = get_angle("VD")
+        freccia_tab = get_freccia_tab()
+    else:
+        print("Using default data")
+        print()
 
-    # return param1, param2, param3, arrowMedia, parametro_media, arr1, arr2, arr3, ecart_type
-
+    # print params
     print("INPUT DATA")
     print("\ttemperature:", temperature, "°C")
     print("\televation difference:", elevation_difference, "m")
@@ -201,6 +254,11 @@ if __name__ == '__main__':
     print()
     print("\tHdx:", format(angle_hd, '.4f'), "°")
     print("\tVdx:", format(angle_vd, '.4f'), "°")
+
+    # calculate and display results
+    param12, param13, param23, result, media, arrow1, arrow2, arrow3, error = \
+        calculate_params(span_length, angle_hsx, angle_vsx, angle_h1, angle_v1, angle_h2, angle_v2, angle_h3,
+                         angle_v3, angle_hd, angle_vd, elevation_difference)
 
     print()
     print("**** RESULTS  ****")
