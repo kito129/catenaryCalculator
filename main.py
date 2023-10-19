@@ -1,30 +1,60 @@
 import math
 
+PI = math.pi
 
-def calculator(angle_hsx_radiant, angle_vsx_radiant, angle_h1_radiant, angle_v1_radiant,
-               angle_h2_radiant, angle_v2_radiant, angle_hd_radiant, angle_vd_radiant, span):
-    pi = math.pi
-    alpha = (pi - angle_hd_radiant + angle_hsx_radiant) / 2
-    vgr = pi / 2 - pi / 200 * angle_vsx_radiant
-    iterationValue = (pi - angle_hd_radiant + angle_hsx_radiant) / 4
+
+# *** SUPPORT FUNCTIONS  ***
+def function_approximate(param, first_value, second_value, last_sub):
+    return param * (
+            (math.exp((first_value - second_value) / param) + math.exp(-(first_value - second_value) / param)) / 2 -
+            (math.exp(second_value / param) + math.exp(-second_value / param)) / 2) - last_sub
+
+
+def function_derivate_approximate(param, a, b):
+    return -(math.exp((a - b) / param) - math.exp(-(a - b) / param)) / 2 - (
+            math.exp(b / param) - math.exp(-b / param)) / 2
+
+
+def arrow_calculator(campata, elevation_diff, param):
+    return campata * (campata ** 2 + elevation_diff ** 2) ** 0.5 / (8 * param)
+
+
+def angle_in_radiant(angle):
+    return PI / 2 - PI / 200 * angle
+
+
+def radiant_conversion(angle_a, angle_b):
+    delta_angle = angle_a - angle_b
+    if delta_angle < 0:
+        radian_value = PI / 200 * (400 + delta_angle)
+    else:
+        radian_value = PI / 200 * delta_angle
+    return radian_value
+
+
+# *** MAIN FUNCTIONS  ***
+
+def newton_rapshon_method(angle_hgr_radiant, angle_vgr_radiant, angle_h1_radiant, angle_v1_radiant,
+                          angle_h2_radiant, angle_v2_radiant, angle_hd_radiant, angle_vd_radiant, span):
+    alpha = (PI - angle_hd_radiant + angle_hgr_radiant) / 2
+    iterationValue = (PI - angle_hd_radiant + angle_hgr_radiant) / 4
     param = 1000
     f2 = 1
     i = 1
 
-    # hello
-
     while abs(iterationValue) > 0.00000157:
-        ag = span * math.sin(pi - angle_hd_radiant - alpha) / math.sin(angle_hd_radiant)
+        ag = span * math.sin(PI - angle_hd_radiant - alpha) / math.sin(angle_hd_radiant)
         ad = span * math.sin(alpha) / math.sin(angle_hd_radiant)
-        yd = ad * math.tan(angle_vd_radiant) - ag * math.tan(vgr)
-        x1 = ag * math.sin(angle_h1_radiant) / math.sin(pi - angle_h1_radiant - alpha)
+        yd = ad * math.tan(angle_vd_radiant) - ag * math.tan(angle_vgr_radiant)
+        x1 = ag * math.sin(angle_h1_radiant) / math.sin(PI - angle_h1_radiant - alpha)
         a1 = x1 * math.sin(alpha) / math.sin(angle_h1_radiant)
-        y1 = a1 * math.tan(angle_v1_radiant) - ag * math.tan(vgr)
-        x2 = ag * math.sin(angle_h2_radiant) / math.sin(pi - angle_h2_radiant - alpha)
+        y1 = a1 * math.tan(angle_v1_radiant) - ag * math.tan(angle_vgr_radiant)
+        x2 = ag * math.sin(angle_h2_radiant) / math.sin(PI - angle_h2_radiant - alpha)
         a2 = x2 * math.sin(alpha) / math.sin(angle_h2_radiant)
-        y2 = a2 * math.tan(angle_v2_radiant) - ag * math.tan(vgr)
+        y2 = a2 * math.tan(angle_v2_radiant) - ag * math.tan(angle_vgr_radiant)
         f1 = 1
         j = 1
+        x0 = span / 2
 
         while abs(f1) > 0.005:
             x0 = span / 2
@@ -33,12 +63,8 @@ def calculator(angle_hsx_radiant, angle_vsx_radiant, angle_h1_radiant, angle_v1_
 
             while abs(fd) > 0.05:
 
-                fd = param * ((math.exp((span - x0) / param) + math.exp(-(span - x0) / param)) / 2 -
-                              (math.exp(x0 / param) + math.exp(-x0 / param)) / 2) - yd
-
-                functionDerivate = -(math.exp((span - x0) / param) - math.exp(-(span - x0) / param)) / 2 - (
-                        math.exp(x0 / param) - math.exp(-x0 / param)) / 2
-
+                fd = function_approximate(param, span, x0, yd)
+                functionDerivate = function_derivate_approximate(param, span, x0)
                 x0 = x0 - fd / functionDerivate
 
                 if k == 15:
@@ -46,144 +72,161 @@ def calculator(angle_hsx_radiant, angle_vsx_radiant, angle_h1_radiant, angle_v1_
                     param = 0
                 k = k + 1
 
-            f1 = param * ((math.exp((x1 - x0) / param) + math.exp(-(x1 - x0) / param)) / 2 - (
-                    math.exp(x0 / param) + math.exp(-x0 / param)) / 2) - y1
+            f1 = function_approximate(param, x1, x0, y1)
 
             param = param * (param * ((math.exp((x1 - x0) / param) + math.exp(-(x1 - x0) / param)) / 2 - (
                     math.exp(x0 / param) + math.exp(-x0 / param)) / 2) - yd * x1 / span) / (
                             y1 - yd * x1 / span)
 
             if j == 15:
+                print("Newton-Raphson method did not converge")
                 param = 0
 
             j = j + 1
 
-        if param == 0:
-            break
-
-        f2 = param * ((math.exp((x2 - x0) / param) + math.exp(-(x2 - x0) / param)) / 2 - (
-                math.exp(x0 / param) + math.exp(-x0 / param)) / 2) - y2
-
+        f2 = function_approximate(param, x2, x0, y2)
         if f2 > 0:
             alpha = alpha + iterationValue
         else:
             alpha = alpha - iterationValue
 
         if i == 20:
+            print("Newton-Raphson method did not converge")
             param = 0
 
         iterationValue = iterationValue / 2
-        # i = i + 1
+        i = i + 1
 
     return param
 
 
-def calculate_params_in_radiant(len, hsx, vsx, h1, v1, h2, v2, h3, v3, hd, vd):
-    # some constants
-    pi = math.pi
-    hgr = 0
-    vgr = pi / 2 - pi / 200 * vsx
+def calculate_params(campata, hg, vg, h1, v1, h2, v2, h3, v3, hd, vd, elevation_diff):
+    # a = Cells(D30)
+    # hg = Cells(D31)
+    # vg = ...
+    # h1 =
+    # v1 =
+    # h2 =
+    # v2 =
+    # h3 =
+    # v3 =
+    # hd =
+    # vd = Cells(D40)
+
+    hg_r = 0
+    vg_r = PI / 2 - PI / 200 * vg
 
     # radiant conversion
-    if hd < hsx:
-        hdr = pi / 200 * (400 + hd - hsx)
+    hd_r = radiant_conversion(hd, hg)
+    h1_r = radiant_conversion(h1, hg)
+    h2_r = radiant_conversion(h2, hg)
+    # vd, v1 and v2 radiant conversion
+    vd_r = angle_in_radiant(vd)
+    v1_r = angle_in_radiant(v1)
+    v2_r = angle_in_radiant(v2)
+
+    param1 = newton_rapshon_method(hg_r, vg_r, h1_r, v1_r, h2_r, v2_r, hd_r, vd_r, campata)
+
+    h2_r = radiant_conversion(h3, hg)
+    v2_r = angle_in_radiant(v3)
+    param2 = newton_rapshon_method(hg_r, vg_r, h1_r, v1_r, h2_r, v2_r, hd_r, vd_r, campata)
+
+    h1_r = radiant_conversion(h2, hg)
+    v1_r = angle_in_radiant(v2)
+    param3 = newton_rapshon_method(hg_r, vg_r, h1_r, v1_r, h2_r, v2_r, hd_r, vd_r, campata)
+
+    # result calculation
+    parametro_media = (param1 + param2 + param3) / 3
+
+    if parametro_media == 0:
+        arrow_media = 0
     else:
-        hdr = pi / 200 * (hd - hsx)
-    vdr = pi / 2 - pi / 200 * vd
+        arrow_media = arrow_calculator(campata, elevation_diff, parametro_media)
 
-    if h1 < hsx:
-        h1r = pi / 200 * (400 + h1 - hsx)
-    else:
-        h1r = pi / 200 * (h1 - hsx)
-    v1r = pi / 2 - pi / 200 * v1
-
-    if h2 < hsx:
-        h2r = pi / 200 * (400 + h2 - hsx)
-    else:
-        h2r = pi / 200 * (h2 - hsx)
-    v2r = pi / 2 - pi / 200 * v2
-
-    # print(vdr, v1r, v2r)
-    param1 = calculator(hgr, vgr, h1r, v1r, h2r, v2r, hdr, vdr, len)
-
-    if h3 < hsx:
-        h2r = pi / 200 * (400 + h3 - hsx)
-    else:
-        h2r = pi / 200 * (h3 - hsx)
-
-    v2r = pi / 2 - pi / 200 * v3
-
-    # print(vdr, v1r, v2r)
-    param2 = calculator(hgr, vgr, h1r, v1r, h2r, v2r, hdr, vdr, len)
-
-    if h2 < hsx:
-        h1r = pi / 200 * (400 + h2 - hsx)
-    else:
-        h1r = pi / 200 * (h2 - hsx)
-
-    v1r = pi / 2 - pi / 200 * v2
-
-    # print(vdr, v1r, v2r)
-    param3 = calculator(hgr, vgr, h1r, v1r, h2r, v2r, hdr, vdr, len)
+    arr1 = arrow_calculator(campata, elevation_diff, param1)
+    arr2 = arrow_calculator(campata, elevation_diff, param2)
+    arr3 = arrow_calculator(campata, elevation_diff, param3)
 
     ecart_type = math.sqrt(
         (3 * (param1 ** 2 + param2 ** 2 + param3 ** 2) - (param1 + param2 + param3) ** 2) / (3 * (3 - 1)))
 
-    # result calculation
-    average = (param1 + param2 + param3) / 3
+    if ecart_type > 1000:
+        print("ecart_type > 1000", "**** ERROR ****")
+        parametro_media = 0
+        arrow_media = 0
 
-    if average == 0:
-        arrow = 0
-    else:
-        arrow = len * (len ** 2 + average ** 2) ** 0.5 / (8 * average)
-
-    return param1, param2, param3, arrow, average
+    return param1, param2, param3, arrow_media, parametro_media, arr1, arr2, arr3, ecart_type
 
 
-# Example usage
-temperature = 7.0
-elevation_difference = -2.5
-span_lenght = 389.50
-angle_hsx = 0.100
-angle_vsx = 94.058
-angle_h1 = 30.038
-angle_v1 = 93.871
-angle_h2 = 63.971
-angle_v2 = 92.708
-angle_h3 = 90.801
-angle_v3 = 91.907
-angle_hd = 121.841
-angle_vd = 90.464
+# *** MAIN  ***
 
-param12, param13, param23, result, media = calculate_params_in_radiant(span_lenght, angle_hsx, angle_vsx, angle_h1,
-                                                                       angle_v1, angle_h2, angle_v2, angle_h3, angle_v3,
-                                                                       angle_hd, angle_vd)
+if __name__ == '__main__':
+    temperature = 7.0
+    elevation_difference = -2.5
+    span_length = 389.50
+    angle_hsx = 0.100
+    angle_vsx = 94.0580
+    angle_h1 = 30.0380
+    angle_v1 = 93.8710
+    angle_h2 = 63.9710
+    angle_v2 = 92.7080
+    angle_h3 = 90.8010
+    angle_v3 = 91.9070
+    angle_hd = 121.8410
+    angle_vd = 90.4640
+    freccia_tab = 13.5000
 
-# AVERAGE CALCULATIONS
-if media == 0:
-    media_arrow = 0
-    delta = 0
-else:
-    media_arrow = span_lenght * (span_lenght ** 2 + elevation_difference ** 2) ** 0.5 / (8 * media)
-    delta = (media_arrow - result) / result
+    param12, param13, param23, result, media, arrow1, arrow2, arrow3, error = \
+        calculate_params(span_length, angle_hsx, angle_vsx, angle_h1, angle_v1, angle_h2, angle_v2, angle_h3,
+                         angle_v3, angle_hd, angle_vd, elevation_difference)
 
-print("VISTA 1-2")
-print("\tparam:", format(param12, '.3f'))
-print("\tarrow:", format(param13, '.3f'))
-print()
-print("VISTA 2-3")
-print("\tparam:", format(param23, '.3f'))
-print("\tarrow:", format(param13, '.3f'))
-print()
-print("VISTA 1-2")
-print("\tparam:", format(param13, '.3f'))
-print("\tarrow:", format(param13, '.3f'))
-print()
-print("MEDIA")
-print("\tparam:", format(media, '.3f'))
-print("\tarrow:", format(media_arrow, '.3f'))
+    # return param1, param2, param3, arrowMedia, parametro_media, arr1, arr2, arr3, ecart_type
 
-print()
-print("RESULT")
-print("\tresult:", format(result, '.3f'))
-print("\tdelta:", format(delta, '.3f'), "%")
+    print("INPUT DATA")
+    print("\ttemperature:", temperature, "°C")
+    print("\televation difference:", elevation_difference, "m")
+    print("\tspan lenght:", span_length, "m")
+    print()
+    print("\tHsx:", format(angle_hsx, '.4f'), "°")
+    print("\tVsx:", format(angle_vsx, '.4f'), "°")
+    print()
+    print("\tH1:", format(angle_h1, '.4f'), "°")
+    print("\tV1:", format(angle_v1, '.4f'), "°")
+    print()
+    print("\tH2:", format(angle_h2, '.4f'), "°")
+    print("\tV2:", format(angle_v2, '.4f'), "°")
+    print()
+    print("\tH3:", format(angle_h3, '.4f'), "°")
+    print("\tV3:", format(angle_v3, '.4f'), "°")
+    print()
+    print("\tHdx:", format(angle_hd, '.4f'), "°")
+    print("\tVdx:", format(angle_vd, '.4f'), "°")
+
+    print()
+    print("**** RESULTS  ****")
+
+    print("A) VISTA 1-2")
+    print("\tparam:", format(param12, '.4f'))
+    print("\tarrow:", format(arrow1, '.4f'))
+
+    print()
+    print("B) VISTA 2-3")
+    print("\tparam:", format(param23, '.4f'))
+    print("\tarrow:", format(arrow2, '.4f'))
+
+    print()
+    print("C) VISTA 1-3")
+    print("\tparam:", format(param13, '.4f'))
+    print("\tarrow:", format(arrow3, '.4f'))
+
+    print("\033[1m")
+    print("MEDIA")
+    print("\tparam:", format(media, '.4f'))
+    print("\tarrow:", format(result, '.4f'))
+    print("\033[0m")
+
+    print()
+    print("RESULT")
+    print("\tFreccia Tab:", format(freccia_tab, '.4f'))
+    print("\tdelta ° :", format((result - freccia_tab), '.4f'), "°")
+    print("\033[1m", "\tdelta % :", format((result - freccia_tab) / freccia_tab, '.4f'), "%", "\033[0m")
