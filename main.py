@@ -11,6 +11,8 @@ def calculator(angle_hsx_radiant, angle_vsx_radiant, angle_h1_radiant, angle_v1_
     f2 = 1
     i = 1
 
+    # hello
+
     while abs(iterationValue) > 0.00000157:
         ag = span * math.sin(pi - angle_hd_radiant - alpha) / math.sin(angle_hd_radiant)
         ad = span * math.sin(alpha) / math.sin(angle_hd_radiant)
