@@ -8,13 +8,8 @@ catenary calculator using Netwon-Raphson method.
     version: 1.0
     docVersion: 1.0
 
-
-
 ## Change Log:
 
 [Changelogs page](https://github.com/kito129/catenaryCalculator/blob/main/changelogs.md)
 
 ## Description
-
-
-Add this

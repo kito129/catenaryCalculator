@@ -37,12 +37,12 @@ def radiant_conversion(angle_a, angle_b):
 def newton_rapshon_method(angle_hgr_radiant, angle_vgr_radiant, angle_h1_radiant, angle_v1_radiant,
                           angle_h2_radiant, angle_v2_radiant, angle_hd_radiant, angle_vd_radiant, span):
     alpha = (PI - angle_hd_radiant + angle_hgr_radiant) / 2
-    iterationValue = (PI - angle_hd_radiant + angle_hgr_radiant) / 4
+    iteration_alpha = (PI - angle_hd_radiant + angle_hgr_radiant) / 4
     param = 1000
     f2 = 1
     i = 1
 
-    while abs(iterationValue) > 0.00000157:
+    while abs(iteration_alpha) > 0.00000157:
         ag = span * math.sin(PI - angle_hd_radiant - alpha) / math.sin(angle_hd_radiant)
         ad = span * math.sin(alpha) / math.sin(angle_hd_radiant)
         yd = ad * math.tan(angle_vd_radiant) - ag * math.tan(angle_vgr_radiant)
@@ -62,6 +62,9 @@ def newton_rapshon_method(angle_hgr_radiant, angle_vgr_radiant, angle_h1_radiant
             k = 1
 
             while abs(fd) > 0.05:
+
+                # print param approx for each iteration
+                # print(param)
 
                 fd = function_approximate(param, span, x0, yd)
                 functionDerivate = function_derivate_approximate(param, span, x0)
@@ -85,33 +88,23 @@ def newton_rapshon_method(angle_hgr_radiant, angle_vgr_radiant, angle_h1_radiant
             j = j + 1
 
         f2 = function_approximate(param, x2, x0, y2)
+
         if f2 > 0:
-            alpha = alpha + iterationValue
+            alpha = alpha + iteration_alpha
         else:
-            alpha = alpha - iterationValue
+            alpha = alpha - iteration_alpha
 
         if i == 20:
             print("Newton-Raphson method did not converge")
             param = 0
 
-        iterationValue = iterationValue / 2
+        iteration_alpha = iteration_alpha / 2
         i = i + 1
 
     return param
 
 
 def calculate_params(campata, hg, vg, h1, v1, h2, v2, h3, v3, hd, vd, elevation_diff):
-    # a = Cells(D30)
-    # hg = Cells(D31)
-    # vg = ...
-    # h1 =
-    # v1 =
-    # h2 =
-    # v2 =
-    # h3 =
-    # v3 =
-    # hd =
-    # vd = Cells(D40)
 
     hg_r = 0
     vg_r = PI / 2 - PI / 200 * vg
@@ -165,7 +158,6 @@ def get_temperature():
         print("Temperature must be between -10 and 30")
         temp = float(input("Insert temperature: "))
     return temperature
-
 
 def get_elevation_difference():
     elevation_difference = float(input("Insert elevation difference: "))
