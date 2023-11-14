@@ -6,7 +6,6 @@ catenary calculator using Netwon-Raphson method.
     date: 2023/10/18
     last update: 2023/10/19
     version: 1.0.0
-    docVersion: 1.0
 
 ## Change Log:
 
