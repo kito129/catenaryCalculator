@@ -13,7 +13,7 @@ def test_import_main():
     """Test that we can import the main module."""
     try:
         import main
-        assert True
+        assert main is not None
     except ModuleNotFoundError as e:
         if "_tkinter" in str(e):
             pytest.skip("Tkinter not available in this Python installation")

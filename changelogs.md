@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - UV sync now works properly with hatchling build backend
 - Test suite handles missing tkinter dependency gracefully
 - Added missing openpyxl dependency to project configuration
+- **Updated ruff configuration**: Migrated to modern `lint` section format to eliminate deprecation warnings
 
 ### Technical
 - Added tool configurations for black, ruff, mypy, pytest, and coverage

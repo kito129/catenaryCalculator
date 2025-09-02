@@ -227,20 +227,20 @@ def main():
     print("\televation difference:", elevation_difference, "m")
     print("\tcampata:", span_length, "m")
     print()
-    print("\tHsx:", format(angle_hsx, '.4f'),"°")
-    print("\tVsx:", format(angle_vsx, '.4f'),"°")
+    print("\tHsx:", format(angle_hsx, '.4f'), "°")
+    print("\tVsx:", format(angle_vsx, '.4f'), "°")
     print()
-    print("\tH1:", format(angle_h1, '.4f'),"°")
-    print("\tV1:", format(angle_v1, '.4f'),"°")
+    print("\tH1:", format(angle_h1, '.4f'), "°")
+    print("\tV1:", format(angle_v1, '.4f'), "°")
     print()
-    print("\tH2:", format(angle_h2, '.4f'),"°")
-    print("\tV2:", format(angle_v2, '.4f'),"°")
+    print("\tH2:", format(angle_h2, '.4f'), "°")
+    print("\tV2:", format(angle_v2, '.4f'), "°")
     print()
-    print("\tH3:", format(angle_h3, '.4f'),"°")
-    print("\tV3:", format(angle_v3, '.4f'),"°")
+    print("\tH3:", format(angle_h3, '.4f'), "°")
+    print("\tV3:", format(angle_v3, '.4f'), "°")
     print()
-    print("\tHdx:", format(angle_hd, '.4f'),"°")
-    print("\tVdx:", format(angle_vd, '.4f'),"°")
+    print("\tHdx:", format(angle_hd, '.4f'), "°")
+    print("\tVdx:", format(angle_vd, '.4f'), "°")
 
     # calculate and display results
     param12, param13, param23, result, media, arrow1, arrow2, arrow3, error = \
@@ -276,7 +276,6 @@ def main():
     print("\tdelta :", format((result - freccia_tab), '.4f'))
     print("\033[1m", "\tdelta % :", format((result - freccia_tab) / freccia_tab, '.4f'), "%", "\033[0m")
     print("\terror  :", format(error, '.4f'))
-
 
     print()
     input("Press Enter to exit...")
