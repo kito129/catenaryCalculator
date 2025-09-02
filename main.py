@@ -1,6 +1,4 @@
 import math
-import tkinter as tk
-import openpyxl
 
 PI = math.pi
 ITERATION_ALPHA = 0.00000157
@@ -181,41 +179,12 @@ def get_freccia_tab():
     return freccia_tab
 
 
-# *** GUI  ***
-
-def get_white_data(white_data_entry):
-    white_data = white_data_entry.get()
-
-    # Save the white data to the Excel file
-    wb = openpyxl.load_workbook("FILE DI VERIFICA DI REGOLAZIONE DI UN CAVO CON METODO PAPOTOSELT.xlsx")
-    ws = wb["Foglio1"]
-
-    ws.cell(row=11, column=2).value = white_data
-
-    wb.save("FILE DI VERIFICA DI REGOLAZIONE DI UN CAVO CON METODO PAPOTOSELT.xlsx")
-
-
-
-# *** MAIN  ***
 def main():
-
     print("**** FUNE CALCULATOR ****")
     print("**** author: kito129 ****")
     print()
-    # GUI
-    # root = tk.Tk()
 
-    # instructions = tk.Label(root, text="Enter the white data:")
-    # instructions.pack()
-
-    # white_data_entry = tk.Entry(root)
-    # white_data_entry.pack()
-
-    # submit_button = tk.Button(root, text="Submit", command=lambda: get_white_data(white_data_entry))
-    # submit_button.pack()
-
-    #root.mainloop()
-
+    # Default values
     temperature = 7.0
     elevation_difference = -2.5
     span_length = 389.50
@@ -231,8 +200,9 @@ def main():
     angle_vd = 90.4640
     freccia_tab = 13.5000
 
-    if input("Do you want to insert data? yes: input, no: use default data (y/n)") == "y":
-        # function that get this data from user with validation
+    user_input = input("Do you want to insert data? yes: input, no: use default data (y/n): ")
+    if user_input.lower() in ['y', 'yes', 's', 'si']:
+        # Get data from user with validation
         temperature = get_temperature()
         elevation_difference = get_elevation_difference()
         span_length = get_span_length()

@@ -18,11 +18,20 @@ All notable changes to this project will be documented in this file.
 - Virtual environment folder changed from `venv` to `.venv` (hidden)
 - Simplified README with concise Makefile command list
 - Enhanced development workflow with UV commands wrapped in Makefile
+- **Removed all GUI dependencies**: Converted from tkinter GUI to command-line interface
+- **Removed Excel functionality**: Eliminated openpyxl dependency for simpler deployment
+
+### Fixed
+- Build configuration for single-file Python project structure
+- UV sync now works properly with hatchling build backend
+- Test suite handles missing tkinter dependency gracefully
+- Added missing openpyxl dependency to project configuration
 
 ### Technical
 - Added tool configurations for black, ruff, mypy, pytest, and coverage
 - Set up proper exclusions for virtual environments and cache directories
 - Configured pre-commit hooks for automated code quality checks
+- Fixed hatchling build configuration for main.py script
 
 ## [1.0.0] - 2023-10-19
 

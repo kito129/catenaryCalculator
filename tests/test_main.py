@@ -1,8 +1,9 @@
 """Test module for catenary calculator."""
 
-import pytest
-import sys
 import os
+import sys
+
+import pytest
 
 # Add the parent directory to the path so we can import main
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -13,8 +14,13 @@ def test_import_main():
     try:
         import main
         assert True
-    except ImportError:
-        pytest.fail("Could not import main module")
+    except ModuleNotFoundError as e:
+        if "_tkinter" in str(e):
+            pytest.skip("Tkinter not available in this Python installation")
+        else:
+            pytest.fail(f"Could not import main module: {e}")
+    except ImportError as e:
+        pytest.fail(f"Could not import main module: {e}")
 
 
 def test_placeholder():
