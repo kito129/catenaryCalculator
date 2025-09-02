@@ -2,9 +2,9 @@
 
 A catenary calculator using the Newton-Raphson method for precision engineering calculations.
 
-**Author:** kito129  
-**Version:** 1.1.0  
-**Created:** 2023/10/18  
+**Author:** kito129
+**Version:** 1.1.0
+**Created:** 2023/10/18
 **Last Update:** 2025/09/02
 
 ## Change Log
@@ -48,7 +48,7 @@ A command-line application for calculating catenary parameters using the Newton-
    This will create the virtual environment, install uv, sync dependencies, and setup pre-commit hooks.
 
 3. **Manual setup (alternative)**
-   
+
    a. **Create and activate a Python virtual environment**
    ```bash
    make venv
@@ -66,10 +66,10 @@ A command-line application for calculating catenary parameters using the Newton-
    ```bash
    # Initialize uv project (if not already done)
    uv init
-   
+
    # Sync dependencies from pyproject.toml
    uv sync
-   
+
    # Or sync with development dependencies
    uv sync --dev
    ```
@@ -89,7 +89,7 @@ A command-line application for calculating catenary parameters using the Newton-
 - `make venv` - Create Python virtual environment
 - `make venv-clean` - Remove Python virtual environment
 - `make setup` - Setup development environment (includes venv)
-- `make install` - Install/sync dependencies  
+- `make install` - Install/sync dependencies
 - `make run` - Run the main application
 - `make test` - Run tests
 - `make lint` - Run linting
@@ -102,6 +102,10 @@ A command-line application for calculating catenary parameters using the Newton-
 - `make update` - Update dependencies
 - `make lock` - Create/update lock file
 - `make uv-run CMD='command'` - Run any command in project environment
+- `make commit` - Create a conventional commit using commitizen
+- `make bump-patch` - Bump patch version (1.1.0 -> 1.1.1)
+- `make bump-minor` - Bump minor version (1.1.0 -> 1.2.0)
+- `make bump-major` - Bump major version (1.1.0 -> 2.0.0)
 
 ### UV Configuration
 
@@ -127,8 +131,50 @@ Pre-commit hooks ensure code quality before commits:
 - Code formatting
 - Import sorting
 - Trailing whitespace removal
+- **Commit message validation** (Conventional Commits format)
 
 Hooks run automatically on `git commit`, or manually with:
 ```bash
 pre-commit run --all-files
+```
+
+### Semantic Versioning & Commit Conventions
+
+This project follows [Semantic Versioning](https://semver.org/) and [Conventional Commits](https://www.conventionalcommits.org/).
+
+**Commit Message Format:**
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+**Types:**
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting, etc.)
+- `refactor`: Code refactoring
+- `perf`: Performance improvements
+- `test`: Adding/updating tests
+- `chore`: Build process or auxiliary tool changes
+
+**Examples:**
+```bash
+# Use commitizen for guided commits
+make commit
+
+# Manual examples
+git commit -m "feat: add Newton-Raphson iteration limit"
+git commit -m "fix: resolve calculation precision error"
+git commit -m "docs: update API documentation"
+```
+
+**Version Bumping:**
+```bash
+make bump-patch    # 1.1.0 -> 1.1.1 (bug fixes)
+make bump-minor    # 1.1.0 -> 1.2.0 (new features)
+make bump-major    # 1.1.0 -> 2.0.0 (breaking changes)
 ```

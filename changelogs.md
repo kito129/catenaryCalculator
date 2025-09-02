@@ -12,6 +12,10 @@ All notable changes to this project will be documented in this file.
 - Comprehensive pyproject.toml configuration
 - Development tools integration (pytest, black, ruff, flake8)
 - Automated setup command (`make setup`) for one-command environment setup
+- **Semantic versioning support** with commitizen integration
+- **Conventional commit validation** through pre-commit hooks
+- **Version bumping commands** (`make bump-patch`, `make bump-minor`, `make bump-major`)
+- **Guided commit creation** with `make commit` command
 
 ### Changed
 - Updated Python requirement to 3.13+

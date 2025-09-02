@@ -1,4 +1,4 @@
-.PHONY: help venv venv-clean setup install run test lint format check clean add add-dev remove update lock uv-run
+.PHONY: help venv venv-clean setup install run test lint format check clean add add-dev remove update lock uv-run commit bump-patch bump-minor bump-major
 
 # Default target
 help:
@@ -18,6 +18,11 @@ help:
 	@echo "  remove    - Remove a dependency (use: make remove PACKAGE=package_name)"
 	@echo "  update    - Update dependencies"
 	@echo "  lock      - Create/update lock file"
+	@echo "  uv-run    - Run any command in project environment (use: make uv-run CMD='command')"
+	@echo "  commit    - Create a conventional commit using commitizen"
+	@echo "  bump-patch- Bump patch version (1.1.0 -> 1.1.1)"
+	@echo "  bump-minor- Bump minor version (1.1.0 -> 1.2.0)"
+	@echo "  bump-major- Bump major version (1.1.0 -> 2.0.0)"
 	@echo "  uv-run    - Run any command in project environment (use: make uv-run CMD='command')"
 
 # Create Python virtual environment
@@ -145,3 +150,26 @@ uv-run:
 	fi
 	@echo "Running: $(CMD)"
 	uv run $(CMD)
+
+# Semantic versioning and commit commands
+commit:
+	@echo "Creating conventional commit..."
+	uv run cz commit
+
+# Bump patch version (1.1.0 -> 1.1.1)
+bump-patch:
+	@echo "Bumping patch version..."
+	uv run cz bump --increment PATCH
+	@echo "Version bumped! Don't forget to push tags: git push --tags"
+
+# Bump minor version (1.1.0 -> 1.2.0)
+bump-minor:
+	@echo "Bumping minor version..."
+	uv run cz bump --increment MINOR
+	@echo "Version bumped! Don't forget to push tags: git push --tags"
+
+# Bump major version (1.1.0 -> 2.0.0)
+bump-major:
+	@echo "Bumping major version..."
+	uv run cz bump --increment MAJOR
+	@echo "Version bumped! Don't forget to push tags: git push --tags"

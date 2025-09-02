@@ -1,6 +1,6 @@
 [project]
 name = "catenary-calculator"
-version = "1.0.0"
+version = "1.1.0"
 description = "Catenary calculator using Newton-Raphson method"
 authors = [
     {name = "kito129", email = "marco.96.12@gmail.com"}
@@ -31,6 +31,7 @@ dev = [
     "ruff>=0.1.0",
     "pre-commit>=3.0.0",
     "mypy>=1.0.0",
+    "commitizen>=3.0.0",
 ]
 
 [project.urls]
@@ -58,6 +59,7 @@ dev-dependencies = [
     "ruff>=0.1.0",
     "pre-commit>=3.0.0",
     "mypy>=1.0.0",
+    "commitizen>=4.8.3",
 ]
 
 [tool.black]
@@ -153,3 +155,12 @@ exclude_lines = [
     "class .*\\bProtocol\\):",
     "@(abc\\.)?abstractmethod",
 ]
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "1.1.0"
+tag_format = "v$version"
+update_changelog_on_bump = true
+annotated_tag = true
+version_provider = "pep621"
+major_version_zero = false
