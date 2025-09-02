@@ -1,23 +1,31 @@
-# catenary Calculator
-catenary calculator using Netwon-Raphson method.
+# Catenary Calculator
 
-# catenary Calculator
-    author: kito129
-    date: 2023/10/18
-    last update: 2023/10/19
-    version: 1.0.0
+A catenary calculator using the Newton-Raphson method for precision engineering calculations.
 
-## Change Log:
+**Author:** kito129  
+**Version:** 1.1.0  
+**Created:** 2023/10/18  
+**Last Update:** 2025/09/02
+
+## Change Log
 
 [Changelogs page](https://github.com/kito129/catenaryCalculator/blob/main/changelogs.md)
 
 ## Description
 
-- 10/19/20223 - Create first version funeCalculatorv1_0_0.exe
+A command-line application for calculating catenary parameters using the Newton-Raphson numerical method. The calculator provides precise results for cable sag and tension calculations in engineering applications.
 
-For now it takes in input from text, then I will make graphical interface.
-Do "ENTER" or "n" at first question it does calculations with default data.If you do "S" then it asks for parameters, you put them one by one by pressing "ENTER", after Arrow it shows you results.
-To make new calculation launch the file again
+**Features:**
+- Interactive command-line interface with input validation
+- Default parameter set for quick calculations
+- Newton-Raphson method for high precision
+- Support for custom parameter input
+- Comprehensive development environment with modern Python tooling
+
+**Usage:**
+- Run with `make run` or `python main.py`
+- Choose 'y' to input custom parameters or 'n' to use default values
+- Results include parameter calculations and arrow measurements
 
 ## Setup
 
