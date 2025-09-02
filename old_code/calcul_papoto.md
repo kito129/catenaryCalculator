@@ -101,40 +101,40 @@
             y2 = a2 * Tan(v2r) - ag * Tan(vgr)
             f1 = 1
             j = 1
-        
+
             While Abs(f1) > 0.005
                 x0 = a / 2
                 fd = 1
                 k = 1
-                
+
                 While Abs(fd) > 0.05
                     'fd = param * (Cosh((a - x0) / param) - Cosh(x0 / param)) - yd
                     fd = param * ((Exp((a - x0) / param) + Exp(-(a - x0) / param)) / 2 - (Exp(x0 / param) + Exp(-x0 / param)) / 2) - yd
                     'fdev = -Sinh((a - x0) / param) - Sinh(x0 / param)
                     fdev = -(Exp((a - x0) / param) - Exp(-(a - x0) / param)) / 2 - (Exp(x0 / param) - Exp(-x0 / param)) / 2
                     x0 = x0 - fd / fdev
-                
+
                     If k = 15 Then
                         param = 0
                     End If
-                    
+
                     k = k + 1
                 Wend
-                    
+
                 'f1 = param * (Cosh((x1 - x0) / param) - Cosh(x0 / param)) - y1
                 f1 = param * ((Exp((x1 - x0) / param) + Exp(-(x1 - x0) / param)) / 2 - (Exp(x0 / param) + Exp(-x0 / param)) / 2) - y1
-                    
+
                 'param = param * (param * (Cosh((x1 - x0) / param) - Cosh(x0 / param)) - yd * x1 / a) / (y1 - yd * x1 / a)
                 param = param * (param * ((Exp((x1 - x0) / param) + Exp(-(x1 - x0) / param)) / 2 - (Exp(x0 / param) + Exp(-x0 / param)) / 2) - yd * x1 / a) / (y1 - yd * x1 / a)
                     If j = 15 Then
                         param = 0
                     End If
-                    
+
                 j = j + 1
             Wend
             'f2 = param * (Cosh((x2 - x0) / param) - Cosh(x0 / param)) - y2
             f2 = param * ((Exp((x2 - x0) / param) + Exp(-(x2 - x0) / param)) / 2 - (Exp(x0 / param) + Exp(-x0 / param)) / 2) - y2
-            
+
             If f2 > 0 Then
                 alpha = alpha + iteralpha
                 Else
@@ -147,5 +147,3 @@
         Wend
 
     End Sub
-
-

@@ -7,27 +7,34 @@ FD_MAX = 0.05
 
 
 # *** SUPPORT FUNCTIONS  ***
-def function_approximate(param, a_, b_, sub):
-    return param * (
-            (math.exp((a_ - b_) / param) + math.exp(-(a_ - b_) / param)) / 2 -
-            (math.exp(b_ / param) + math.exp(-b_ / param)) / 2) - sub
+def function_approximate(param: float, a_: float, b_: float, sub: float) -> float:
+    return (
+        param
+        * (
+            (math.exp((a_ - b_) / param) + math.exp(-(a_ - b_) / param)) / 2
+            - (math.exp(b_ / param) + math.exp(-b_ / param)) / 2
+        )
+        - sub
+    )
 
 
-def function_derivate_approximate(param, a, b):
-    return -(math.exp((a - b) / param) - math.exp(-(a - b) / param)) / 2 - (
-            math.exp(b / param) - math.exp(-b / param)) / 2
+def function_derivate_approximate(param: float, a: float, b: float) -> float:
+    return (
+        -(math.exp((a - b) / param) - math.exp(-(a - b) / param)) / 2
+        - (math.exp(b / param) - math.exp(-b / param)) / 2
+    )
 
 
-def arrow_calculator(campata, elevation_diff, param):
+def arrow_calculator(campata: float, elevation_diff: float, param: float) -> float:
     # sag = campata * (1 - math.sqrt(1 - (elevation_diff ** 2) / campata ** 2))
-    return campata * math.sqrt(campata ** 2 + elevation_diff ** 2) / (8 * param)
+    return campata * math.sqrt(campata**2 + elevation_diff**2) / (8 * param)
 
 
-def angle_in_radiant(angle):
+def angle_in_radiant(angle: float) -> float:
     return PI / 2 - PI / 200 * angle
 
 
-def radiant_conversion(angle_a, angle_b):
+def radiant_conversion(angle_a: float, angle_b: float) -> float:
     delta_angle = angle_a - angle_b
     if delta_angle < 0:
         radian_value = PI / 200 * (400 + delta_angle)
@@ -38,13 +45,23 @@ def radiant_conversion(angle_a, angle_b):
 
 # *** MAIN FUNCTIONS  ***
 
-def newton_rapshon_method(angle_hgr_radiant, angle_vgr_radiant, angle_h1_radiant, angle_v1_radiant,
-                          angle_h2_radiant, angle_v2_radiant, angle_hd_radiant, angle_vd_radiant, span, feedback):
 
+def newton_rapshon_method(
+    angle_hgr_radiant: float,
+    angle_vgr_radiant: float,
+    angle_h1_radiant: float,
+    angle_v1_radiant: float,
+    angle_h2_radiant: float,
+    angle_v2_radiant: float,
+    angle_hd_radiant: float,
+    angle_vd_radiant: float,
+    span: float,
+    feedback: float,
+) -> tuple[float, float]:
     alpha = (PI - angle_hd_radiant + angle_hgr_radiant) / 2
     iteration_alpha = (PI - angle_hd_radiant + angle_hgr_radiant) / 4
-    param = 1000
-    f2 = 1
+    param = 1000.0
+    f2 = 1.0
     i = 1
     # my add
     fd = feedback
@@ -59,11 +76,11 @@ def newton_rapshon_method(angle_hgr_radiant, angle_vgr_radiant, angle_h1_radiant
         x2 = ag * math.sin(angle_h2_radiant) / math.sin(PI - angle_h2_radiant - alpha)
         a2 = x2 * math.sin(alpha) / math.sin(angle_h2_radiant)
         y2 = a2 * math.tan(angle_v2_radiant) - ag * math.tan(angle_vgr_radiant)
-        f1 = 1
+        f1 = 1.0
         j = 1
         while abs(f1) > F1_MAX:
             x0 = span / 2
-            fd = 1
+            fd = 1.0
             k = 1
             while abs(fd) > FD_MAX:
                 fd = function_approximate(param, span, x0, yd)
@@ -71,14 +88,24 @@ def newton_rapshon_method(angle_hgr_radiant, angle_vgr_radiant, angle_h1_radiant
                 x0 = x0 - fd / functionDerivate
                 if k == 15:
                     print("Newton-Raphson method did not converge")
-                    param = 0
+                    param = 0.0
                 k = k + 1
             f1 = function_approximate(param, x1, x0, y1)
-            param = param * (param * ((math.exp((x1 - x0) / param) + math.exp(-(x1 - x0) / param)) / 2 - (
-                    math.exp(x0 / param) + math.exp(-x0 / param)) / 2) - yd * x1 / span) / (y1 - yd * x1 / span)
+            param = (
+                param
+                * (
+                    param
+                    * (
+                        (math.exp((x1 - x0) / param) + math.exp(-(x1 - x0) / param)) / 2
+                        - (math.exp(x0 / param) + math.exp(-x0 / param)) / 2
+                    )
+                    - yd * x1 / span
+                )
+                / (y1 - yd * x1 / span)
+            )
             if j == 15:
                 print("Newton-Raphson method did not converge")
-                param = 0
+                param = 0.0
             j = j + 1
         f2 = function_approximate(param, x2, x0, y2)
         if f2 > 0:
@@ -87,14 +114,27 @@ def newton_rapshon_method(angle_hgr_radiant, angle_vgr_radiant, angle_h1_radiant
             alpha = alpha - iteration_alpha
         if i == 20:
             print("Newton-Raphson method did not converge")
-            param = 0
+            param = 0.0
         iteration_alpha = iteration_alpha / 2
         i = i + 1
 
     return param, fd
 
 
-def calculate_params(campata, hg, vg, h1, v1, h2, v2, h3, v3, hd, vd, elevation_diff):
+def calculate_params(
+    campata: float,
+    hg: float,
+    vg: float,
+    h1: float,
+    v1: float,
+    h2: float,
+    v2: float,
+    h3: float,
+    v3: float,
+    hd: float,
+    vd: float,
+    elevation_diff: float,
+) -> tuple[float, float, float, float, float, float, float, float, float]:
     hg_r = 0
     vg_r = PI / 2 - PI / 200 * vg
 
@@ -106,22 +146,28 @@ def calculate_params(campata, hg, vg, h1, v1, h2, v2, h3, v3, hd, vd, elevation_
     h2_r = radiant_conversion(h2, hg)
     v2_r = angle_in_radiant(v2)
 
-    feedback = 1
-    param1, feedback = newton_rapshon_method(hg_r, vg_r, h1_r, v1_r, h2_r, v2_r, hd_r, vd_r, campata, feedback)
+    feedback = 1.0
+    param1, feedback = newton_rapshon_method(
+        hg_r, vg_r, h1_r, v1_r, h2_r, v2_r, hd_r, vd_r, campata, feedback
+    )
 
     h2_r = radiant_conversion(h3, hg)
     v2_r = angle_in_radiant(v3)
-    param2, feedback = newton_rapshon_method(hg_r, vg_r, h1_r, v1_r, h2_r, v2_r, hd_r, vd_r, campata, feedback)
+    param2, feedback = newton_rapshon_method(
+        hg_r, vg_r, h1_r, v1_r, h2_r, v2_r, hd_r, vd_r, campata, feedback
+    )
 
     h1_r = radiant_conversion(h2, hg)
     v1_r = angle_in_radiant(v2)
-    param3, feedback = newton_rapshon_method(hg_r, vg_r, h1_r, v1_r, h2_r, v2_r, hd_r, vd_r, campata, feedback)
+    param3, feedback = newton_rapshon_method(
+        hg_r, vg_r, h1_r, v1_r, h2_r, v2_r, hd_r, vd_r, campata, feedback
+    )
 
     # result calculation
     parametro_media = (param1 + param2 + param3) / 3
 
     if parametro_media == 0:
-        arrow_media = 0
+        arrow_media = 0.0
     else:
         arrow_media = arrow_calculator(campata, elevation_diff, parametro_media)
 
@@ -130,18 +176,33 @@ def calculate_params(campata, hg, vg, h1, v1, h2, v2, h3, v3, hd, vd, elevation_
     arr3 = arrow_calculator(campata, elevation_diff, param3)
 
     ecart_type = math.sqrt(
-        (3 * (param1 ** 2 + param2 ** 2 + param3 ** 2) - (param1 + param2 + param3) ** 2) / (3 * (3 - 1)))
+        (
+            3 * (param1**2 + param2**2 + param3**2)
+            - (param1 + param2 + param3) ** 2
+        )
+        / (3 * (3 - 1))
+    )
 
     if ecart_type > 1000:
         print("ecart_type > 1000", "**** ERROR ****")
-        parametro_media = 0
-        arrow_media = 0
+        parametro_media = 0.0
+        arrow_media = 0.0
 
-    return param1, param2, param3, arrow_media, parametro_media, arr1, arr2, arr3, ecart_type
+    return (
+        param1,
+        param2,
+        param3,
+        arrow_media,
+        parametro_media,
+        arr1,
+        arr2,
+        arr3,
+        ecart_type,
+    )
 
 
 # *** GET DATA FUNCTIONS  ***
-def get_temperature():
+def get_temperature() -> float:
     temp = float(input("Insert temperature: "))
     while temp < -10 or temp > 30:
         print("Temperature must be between -10 and 30")
@@ -149,7 +210,7 @@ def get_temperature():
     return temp
 
 
-def get_elevation_difference():
+def get_elevation_difference() -> float:
     elevation_difference = float(input("Insert elevation difference: "))
     while elevation_difference < -1000 or elevation_difference > 1000:
         print("Elevation difference must be between -1000 and 1000")
@@ -157,7 +218,7 @@ def get_elevation_difference():
     return elevation_difference
 
 
-def get_span_length():
+def get_span_length() -> float:
     span_length = float(input("Insert campata: "))
     while span_length < -1000 or span_length > 1000:
         print("Campata must be between -1000 and 1000")
@@ -165,7 +226,7 @@ def get_span_length():
     return span_length
 
 
-def get_angle(title):
+def get_angle(title: str) -> float:
     print("Getting angle: ", title)
     angle = float(input("Insert angle: "))
     while angle <= 0 or angle >= 400:
@@ -174,12 +235,12 @@ def get_angle(title):
     return angle
 
 
-def get_freccia_tab():
+def get_freccia_tab() -> float:
     freccia_tab = float(input("Insert freccia tab: "))
     return freccia_tab
 
 
-def main():
+def main() -> None:
     print("**** FUNE CALCULATOR ****")
     print("**** author: kito129 ****")
     print()
@@ -200,8 +261,10 @@ def main():
     angle_vd = 90.4640
     freccia_tab = 13.5000
 
-    user_input = input("Do you want to insert data? yes: input, no: use default data (y/n): ")
-    if user_input.lower() in ['y', 'yes', 's', 'si']:
+    user_input = input(
+        "Do you want to insert data? yes: input, no: use default data (y/n): "
+    )
+    if user_input.lower() in ["y", "yes", "s", "si"]:
         # Get data from user with validation
         temperature = get_temperature()
         elevation_difference = get_elevation_difference()
@@ -227,55 +290,82 @@ def main():
     print("\televation difference:", elevation_difference, "m")
     print("\tcampata:", span_length, "m")
     print()
-    print("\tHsx:", format(angle_hsx, '.4f'), "°")
-    print("\tVsx:", format(angle_vsx, '.4f'), "°")
+    print("\tHsx:", format(angle_hsx, ".4f"), "°")
+    print("\tVsx:", format(angle_vsx, ".4f"), "°")
     print()
-    print("\tH1:", format(angle_h1, '.4f'), "°")
-    print("\tV1:", format(angle_v1, '.4f'), "°")
+    print("\tH1:", format(angle_h1, ".4f"), "°")
+    print("\tV1:", format(angle_v1, ".4f"), "°")
     print()
-    print("\tH2:", format(angle_h2, '.4f'), "°")
-    print("\tV2:", format(angle_v2, '.4f'), "°")
+    print("\tH2:", format(angle_h2, ".4f"), "°")
+    print("\tV2:", format(angle_v2, ".4f"), "°")
     print()
-    print("\tH3:", format(angle_h3, '.4f'), "°")
-    print("\tV3:", format(angle_v3, '.4f'), "°")
+    print("\tH3:", format(angle_h3, ".4f"), "°")
+    print("\tV3:", format(angle_v3, ".4f"), "°")
     print()
-    print("\tHdx:", format(angle_hd, '.4f'), "°")
-    print("\tVdx:", format(angle_vd, '.4f'), "°")
+    print("\tHdx:", format(angle_hd, ".4f"), "°")
+    print("\tVdx:", format(angle_vd, ".4f"), "°")
 
     # calculate and display results
-    param12, param13, param23, result, media, arrow1, arrow2, arrow3, error = \
-        calculate_params(span_length, angle_hsx, angle_vsx, angle_h1, angle_v1, angle_h2, angle_v2, angle_h3,
-                         angle_v3, angle_hd, angle_vd, elevation_difference)
+    (
+        param12,
+        param13,
+        param23,
+        result,
+        media,
+        arrow1,
+        arrow2,
+        arrow3,
+        error,
+    ) = calculate_params(
+        span_length,
+        angle_hsx,
+        angle_vsx,
+        angle_h1,
+        angle_v1,
+        angle_h2,
+        angle_v2,
+        angle_h3,
+        angle_v3,
+        angle_hd,
+        angle_vd,
+        elevation_difference,
+    )
 
     print()
     print("**** RESULTS  ****")
 
     print("A) VISTA 1-2")
-    print("\tparam:", format(param12, '.4f'))
-    print("\tarrow:", format(arrow1, '.4f'))
+    print("\tparam:", format(param12, ".4f"))
+    print("\tarrow:", format(arrow1, ".4f"))
 
     print()
     print("B) VISTA 2-3")
-    print("\tparam:", format(param23, '.4f'))
-    print("\tarrow:", format(arrow3, '.4f'))
+    print("\tparam:", format(param23, ".4f"))
+    print("\tarrow:", format(arrow3, ".4f"))
 
     print()
     print("C) VISTA 1-3")
-    print("\tparam:", format(param13, '.4f'))
-    print("\tarrow:", format(arrow2, '.4f'))
+    print("\tparam:", format(param13, ".4f"))
+    print("\tarrow:", format(arrow2, ".4f"))
 
     print("\033[1m")
     print("MEDIA")
-    print("\tparam:", format(media, '.4f'))
-    print("\tarrow:", format(result, '.4f'))
+    print("\tparam:", format(media, ".4f"))
+    print("\tarrow:", format(result, ".4f"))
     print("\033[0m")
 
     print()
     print("RESULT")
-    print("\tFreccia Tab:", format(freccia_tab, '.4f'))
-    print("\tdelta :", format((result - freccia_tab), '.4f'))
-    print("\033[1m", "\tdelta % :", format((result - freccia_tab) / freccia_tab, '.4f'), "%", "\033[0m")
-    print("\terror  :", format(error, '.4f'))
+    print("\tFreccia Tab:", format(freccia_tab, ".4f"))
+    print("\tdelta :", format((result - freccia_tab), ".4f"))
+    print(
+        "\033[1m",
+        "\tdelta % :",
+        format((result - freccia_tab) / freccia_tab, ".4f"),
+        "%",
+        "\033[0m",
+    )
+    print("\terror  :", format(error, ".4f"))
 
     print()
     input("Press Enter to exit...")

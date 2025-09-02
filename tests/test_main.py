@@ -9,10 +9,11 @@ import pytest
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-def test_import_main():
+def test_import_main() -> None:
     """Test that we can import the main module."""
     try:
         import main
+
         assert main is not None
     except ModuleNotFoundError as e:
         if "_tkinter" in str(e):
@@ -23,7 +24,7 @@ def test_import_main():
         pytest.fail(f"Could not import main module: {e}")
 
 
-def test_placeholder():
+def test_placeholder() -> None:
     """Placeholder test to ensure pytest runs."""
     assert 1 + 1 == 2
 

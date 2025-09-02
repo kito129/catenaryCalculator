@@ -1,11 +1,11 @@
-    
+
     Sub calcul()
         ActiveSheet.Unprotect
-            
+
             Range("D41:K48").Select
             Selection.ClearContents
             Range("B21").Select
-            
+
         i = 4
         Call Cable_i(i)
         i = 5
@@ -35,7 +35,7 @@
             GoTo line1
             End If
 
-        // get parameters   
+        // get parameters
         a = Cells(30, i)
 
         hg = Cells(31, i)
@@ -73,7 +73,7 @@
         Cells(46, i) = Cells(30, i) * (Cells(30, i) ^ 2 + Cells(29, i) ^ 2) ^ 0.5 / (8 * Cells(45, i))
         // param13 = a * (a ^ 2 + b ^ 2) ^ 0.5 / (8 * param)
 
-        
+
         // calculate the average
         ecart_type = Sqr((3 * (Cells(41, i) ^ 2 + Cells(43, i) ^ 2 + Cells(45, i) ^ 2) - (Cells(41, i) + Cells(43, i) + Cells(45, i)) ^ 2) / (3 * (3 - 1)))
         // ecart_type = Sqr((3 * (param12 ^ 2 + param23 ^ 2 + param13 ^ 2) - (param12 + param23 + param13) ^ 2) / (3 * (3 - 1)))
@@ -83,11 +83,11 @@
             Cells(47, i) = "Papoto"
             Cells(48, i) = "Erroné"
             Else // no error, write the average
-            
+
             // MEDIA - PARAMETRO
             Cells(47, i) = (param12 + param13 + param23) / 3
             // mediaParametro = (param12 + param13 + param23) / 3
-            
+
             // MEDIA - FRECCIA
             Cells(48, i) = Cells(30, i) * (Cells(30, i) ^ 2 + Cells(29, i) ^ 2) ^ 0.5 / (8 * Cells(47, i))
             // mediaFreccia = a * (a ^ 2 + b ^ 2) ^ 0.5 / (8 * mediaParametro)
@@ -202,39 +202,39 @@
             y2 = a2 * Tan(v2r) - ag * Tan(vgr)
             f1 = 1
             j = 1
-        
+
             While Abs(f1) > 0.005
                 x0 = a / 2
                 fd = 1
                 k = 1
-                
+
                 While Abs(fd) > 0.05
-                    
+
                     fd = param * ((Exp((a - x0) / param) + Exp(-(a - x0) / param)) / 2 - (Exp(x0 / param) + Exp(-x0 / param)) / 2) - yd
-                    
-                    
+
+
                     fdev = -(Exp((a - x0) / param) - Exp(-(a - x0) / param)) / 2 - (Exp(x0 / param) - Exp(-x0 / param)) / 2
                     x0 = x0 - fd / fdev
-                
+
                     If k = 15 Then
                         param = 0
                     End If
-                    
+
                     k = k + 1
                 Wend
-                    
+
                 f1 = param * ((Exp((x1 - x0) / param) + Exp(-(x1 - x0) / param)) / 2 - (Exp(x0 / param) + Exp(-x0 / param)) / 2) - y1
-                    
+
                 param = param * (param * ((Exp((x1 - x0) / param) + Exp(-(x1 - x0) / param)) / 2 - (Exp(x0 / param) + Exp(-x0 / param)) / 2) - yd * x1 / a) / (y1 - yd * x1 / a)
                     If j = 15 Then
                         param = 0
                     End If
-                    
+
                 j = j + 1
             Wend
-            
+
             f2 = param * ((Exp((x2 - x0) / param) + Exp(-(x2 - x0) / param)) / 2 - (Exp(x0 / param) + Exp(-x0 / param)) / 2) - y2
-            
+
             If f2 > 0 Then
                 alpha = alpha + iteralpha
                 Else
