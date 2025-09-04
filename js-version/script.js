@@ -71,10 +71,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const y2 = a2 * Math.tan(angle_v2_radiant) - ag * Math.tan(angle_vgr_radiant);
 
             let f1 = 1.0;
+            let x0;
             for (let j = 0; j < 15; j++) {
                 if (Math.abs(f1) <= F1_MAX) break;
 
-                let x0 = span / 2;
+                x0 = span / 2;
                 fd = 1.0;
                 for (let k = 0; k < 15; k++) {
                     if (Math.abs(fd) <= FD_MAX) break;
