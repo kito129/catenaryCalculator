@@ -23,9 +23,29 @@ A command-line application for calculating catenary parameters using the Newton-
 - Comprehensive development environment with modern Python tooling
 
 **Usage:**
+
+### Command-line Version
 - Run with `make run` or `python main.py`
 - Choose 'y' to input custom parameters or 'n' to use default values
 - Results include parameter calculations and arrow measurements
+
+### JavaScript Version (Web-based)
+This project also includes a web-based version of the Catenary Calculator with a graphical user interface and a 3D plot of the catenary curve.
+
+#### Prerequisites
+- [Node.js](https://nodejs.org/) (which includes npm)
+
+#### Running the Web-based Calculator
+1. **Navigate to the `js-version` directory:**
+   ```bash
+   cd js-version
+   ```
+2. **Run the server:**
+   ```bash
+   node server.js
+   ```
+3. **Open your browser:**
+   Navigate to `http://localhost:3000` to use the web-based calculator.
 
 ## Setup
 
