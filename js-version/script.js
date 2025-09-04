@@ -207,52 +207,89 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const x = [];
-        const y = [];
-        const z = [];
+        const x_catenary = [];
+        const y_catenary = [];
+        const z_catenary = [];
         const steps = 100;
         const stepSize = span / steps;
 
         for (let i = 0; i <= steps; i++) {
             const xi = -span / 2 + i * stepSize;
-            // Catenary equation: z = param * cosh(x/param)
-            // To handle elevation difference, we can add a linear component.
             const zi = param * Math.cosh(xi / param) + (elevation_diff / span) * xi;
-            x.push(xi);
-            y.push(0); // Plot in the x-z plane
-            z.push(zi);
+            x_catenary.push(xi);
+            y_catenary.push(0);
+            z_catenary.push(zi);
         }
 
-        // Normalize Z to start at 0 for better visualization
-        const minZ = Math.min(...z);
-        const normalizedZ = z.map(zi => zi - minZ);
+        const minZ = Math.min(...z_catenary);
+        const normalizedZ = z_catenary.map(zi => zi - minZ);
 
-        const trace = {
-            x: x,
-            y: y,
+        const pole1_x = -span / 2;
+        const pole2_x = span / 2;
+        const pole1_z = normalizedZ[0];
+        const pole2_z = normalizedZ[normalizedZ.length - 1];
+
+        const catenaryTrace = {
+            x: x_catenary,
+            y: y_catenary,
             z: normalizedZ,
             mode: 'lines',
             type: 'scatter3d',
+            name: 'Catenary',
             line: {
                 width: 6,
                 color: '#007bff'
             }
         };
 
+        const pole1Trace = {
+            x: [pole1_x, pole1_x],
+            y: [0, 0],
+            z: [0, pole1_z],
+            mode: 'lines',
+            type: 'scatter3d',
+            name: 'Pole 1',
+            line: {
+                width: 10,
+                color: '#8B4513'
+            }
+        };
+
+        const pole2Trace = {
+            x: [pole2_x, pole2_x],
+            y: [0, 0],
+            z: [0, pole2_z],
+            mode: 'lines',
+            type: 'scatter3d',
+            name: 'Pole 2',
+            line: {
+                width: 10,
+                color: '#8B4513'
+            }
+        };
+
+        const data = [catenaryTrace, pole1Trace, pole2Trace];
+
         const layout = {
-            title: 'Catenary Curve',
+            title: 'Catenary Curve and Poles',
+            showlegend: true,
             scene: {
                 xaxis: { title: 'X (m)' },
                 yaxis: { title: 'Y (m)' },
                 zaxis: { title: 'Z (m)' },
-                aspectratio: { x: 1, y: 1, z: 0.5 }
+                aspectratio: { x: 1, y: 1, z: 0.5 },
+                camera: {
+                    eye: { x: 0, y: -2.5, z: 0.5 }
+                }
             },
             margin: {
                 l: 0, r: 0, b: 0, t: 40
             }
         };
 
-        Plotly.newPlot('plot', [trace], layout);
+        Plotly.newPlot('plot', data, layout);
+
+        return { pole1_x, pole1_z, pole2_x, pole2_z };
     }
 
 
@@ -307,7 +344,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('delta_percent').textContent = delta_percent.toFixed(4) + ' %';
         document.getElementById('error').textContent = results.error.toFixed(4);
 
-        plotCatenary(results.media_param, inputs.span_length, inputs.elevation_difference);
+        const poleData = plotCatenary(results.media_param, inputs.span_length, inputs.elevation_difference);
+        document.getElementById('pole1_pos').textContent = `(${poleData.pole1_x.toFixed(2)}, ${poleData.pole1_z.toFixed(2)})`;
+        document.getElementById('pole2_pos').textContent = `(${poleData.pole2_x.toFixed(2)}, ${poleData.pole2_z.toFixed(2)})`;
     });
 
     const defaultValues = {
@@ -347,6 +386,19 @@ document.addEventListener('DOMContentLoaded', () => {
         defaultValues.angle_h3, defaultValues.angle_v3, defaultValues.angle_hd, defaultValues.angle_vd,
         defaultValues.elevation_difference
     );
-    plotCatenary(initialResults.media_param, initialInputs.span_length, initialInputs.elevation_difference);
-
+    const poleData = plotCatenary(initialResults.media_param, initialInputs.span_length, initialInputs.elevation_difference);
+    document.getElementById('param12').textContent = '...';
+    document.getElementById('arrow1').textContent = '...';
+    document.getElementById('param23').textContent = '...';
+    document.getElementById('arrow3').textContent = '...';
+    document.getElementById('param13').textContent = '...';
+    document.getElementById('arrow2').textContent = '...';
+    document.getElementById('media_param').textContent = '...';
+    document.getElementById('media_arrow').textContent = '...';
+    document.getElementById('res_freccia_tab').textContent = '...';
+    document.getElementById('delta').textContent = '...';
+    document.getElementById('delta_percent').textContent = '...';
+    document.getElementById('error').textContent = '...';
+    document.getElementById('pole1_pos').textContent = `(${poleData.pole1_x.toFixed(2)}, ${poleData.pole1_z.toFixed(2)})`;
+    document.getElementById('pole2_pos').textContent = `(${poleData.pole2_x.toFixed(2)}, ${poleData.pole2_z.toFixed(2)})`;
 });
